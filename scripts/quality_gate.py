@@ -14,6 +14,8 @@ from typing import Sequence
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ARTIFACT_DIR = ROOT / "quality-artifacts"
+MAX_LOG_BYTES = 2_000_000
+_TRUNCATION_MARKER = b"[older quality output truncated]\n"
 
 
 @dataclass(frozen=True)
@@ -91,17 +93,23 @@ def run_gate(name: str, command: list[str], artifact_dir: Path) -> GateResult:
     started = time.monotonic()
     log_path = artifact_dir / f"{name}.log"
     try:
-        completed = subprocess.run(
-            command,
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            timeout=600,
-            check=False,
-        )
-        output = completed.stdout[-2_000_000:]
-        log_path.write_text(output, encoding="utf-8")
+        # Qt/Cocoa acceptance tests can crash when their native output is attached to
+        # a Python PIPE. Stream directly to a regular file, then bound the artifact.
+        with log_path.open("w", encoding="utf-8") as log_stream:
+            completed = subprocess.run(
+                command,
+                cwd=ROOT,
+                text=True,
+                stdout=log_stream,
+                stderr=subprocess.STDOUT,
+                timeout=600,
+                check=False,
+            )
+        if log_path.stat().st_size > MAX_LOG_BYTES:
+            with log_path.open("rb") as source:
+                source.seek(-MAX_LOG_BYTES, os.SEEK_END)
+                tail = source.read(MAX_LOG_BYTES)
+            log_path.write_bytes(_TRUNCATION_MARKER + tail)
         return GateResult(
             name=name,
             command=command,

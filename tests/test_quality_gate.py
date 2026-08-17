@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from subprocess import CompletedProcess
 from unittest.mock import patch
 
 from scripts import quality_gate
@@ -31,6 +32,21 @@ class QualityGateTests(unittest.TestCase):
                 result = quality_gate.run_gate("compile", ["missing"], Path(directory))
             self.assertEqual(result.status, "failed")
             self.assertNotIn("private path", (Path(directory) / "compile.log").read_text())
+
+    def test_gate_streams_to_regular_file_and_bounds_log(self):
+        def fake_run(command, **kwargs):
+            stream = kwargs["stdout"]
+            self.assertFalse(kwargs.get("capture_output", False))
+            stream.write("old\n" + ("x" * (quality_gate.MAX_LOG_BYTES + 100)))
+            return CompletedProcess(command, 0)
+
+        with tempfile.TemporaryDirectory(dir=quality_gate.ROOT) as directory:
+            with patch("scripts.quality_gate.subprocess.run", side_effect=fake_run):
+                result = quality_gate.run_gate("tests", ["python", "-m", "unittest"], Path(directory))
+            log = (Path(directory) / "tests.log").read_bytes()
+            self.assertEqual(result.status, "passed")
+            self.assertTrue(log.startswith(quality_gate._TRUNCATION_MARKER))
+            self.assertLessEqual(len(log), quality_gate.MAX_LOG_BYTES + len(quality_gate._TRUNCATION_MARKER))
 
     def test_main_writes_machine_readable_summary(self):
         with tempfile.TemporaryDirectory(dir=quality_gate.ROOT) as directory:
