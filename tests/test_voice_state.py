@@ -39,6 +39,19 @@ class VoiceStateMachineTests(unittest.TestCase):
         machine.transition(VoiceSessionState.RESPONDING)
         self.assertEqual(machine.state, VoiceSessionState.RESPONDING)
 
+    def test_history_is_bounded_during_long_running_sessions(self):
+        machine = VoiceStateMachine(history_limit=64)
+        for _ in range(40):
+            machine.transition(VoiceSessionState.WAKE_DETECTED)
+            machine.transition(VoiceSessionState.VERIFYING_SPEAKER)
+            machine.transition(VoiceSessionState.IDLE)
+        self.assertEqual(len(machine.history), 64)
+        self.assertEqual(machine.history[-1].current, VoiceSessionState.IDLE)
+
+    def test_history_limit_is_validated(self):
+        with self.assertRaises(ValueError):
+            VoiceStateMachine(history_limit=1)
+
 
 if __name__ == "__main__":
     unittest.main()

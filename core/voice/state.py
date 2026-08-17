@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import threading
+from collections import deque
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
@@ -94,9 +95,11 @@ class StateTransition:
 
 
 class VoiceStateMachine:
-    def __init__(self) -> None:
+    def __init__(self, *, history_limit: int = 2048) -> None:
+        if not 64 <= int(history_limit) <= 10_000:
+            raise ValueError("Voice history limit must be between 64 and 10000.")
         self._state = VoiceSessionState.IDLE
-        self._history: list[StateTransition] = []
+        self._history: deque[StateTransition] = deque(maxlen=int(history_limit))
         self._lock = threading.RLock()
 
     @property
