@@ -10,6 +10,14 @@ Environment: owner macOS session, native `dist/Misha.app`, bundle identifier
   Submit and explanatory text through the macOS accessibility tree.
 - macOS System Settings → Privacy & Security → Microphone listed **Misha: on**.
 - macOS System Settings → Privacy & Security → Accessibility listed **Misha: on**.
+- The current 263 MB arm64 bundle was rebuilt after the voice stability and Whisper
+  fallback changes, ad-hoc hardened-runtime signed, deep-verified and launched through
+  an isolated writable data directory to its PIN surface.
+- The locked PIN surface exposes **Quit Misha without unlocking**; its accessibility
+  contract and reject action are covered by the local UI gate.
+- Finder created a 1 KB `Misha` alias on the Desktop. **Show Original** resolved it to
+  the current project `dist/Misha.app`, so replacing the bundle does not leave a second
+  275 MB Desktop copy.
 
 No permission was changed during this check. No PIN or other credential was entered,
 read or recorded.

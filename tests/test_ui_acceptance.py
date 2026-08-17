@@ -12,7 +12,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
-    QApplication, QCheckBox, QComboBox, QLineEdit, QListWidget, QMessageBox,
+    QApplication, QCheckBox, QComboBox, QDialog, QLineEdit, QListWidget, QMessageBox,
     QPushButton, QSpinBox, QTextEdit, QTimeEdit,
 )
 
@@ -85,6 +85,8 @@ class UIAcceptanceTests(unittest.TestCase):
             pin.quit_button.accessibleName(),
             "Quit Misha without unlocking",
         )
+        pin.quit_button.click()
+        self.assertEqual(pin.result(), QDialog.DialogCode.Rejected)
         overlay.close()
         pin.close()
 
