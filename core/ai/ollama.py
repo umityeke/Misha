@@ -176,6 +176,10 @@ class OllamaProvider:
             return False, str(exc)
 
     def generate(self, request: GenerationRequest) -> str:
+        request_options = dict(request.options)
+        think = request_options.pop("think", None)
+        if think is not None and not isinstance(think, bool):
+            raise ValueError("Ollama think option must be a boolean.")
         payload = {
             "model": self.active_model,
             "prompt": request.prompt,
@@ -183,9 +187,11 @@ class OllamaProvider:
             "stream": False,
             "options": {
                 "temperature": request.temperature,
-                **request.options,
+                **request_options,
             },
         }
+        if think is not None:
+            payload["think"] = think
         if request.json_mode:
             payload["format"] = "json"
         response = {}

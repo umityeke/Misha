@@ -1,4 +1,5 @@
 import unittest
+from email.message import Message
 from io import BytesIO
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
@@ -14,10 +15,30 @@ class OllamaProviderTests(unittest.TestCase):
 
     def test_generation_requests_non_streaming_response(self):
         provider = OllamaProvider("local-model")
-        with patch.object(provider, "_request", return_value={"response": "OK"}) as request:
+        with patch.object(
+            provider, "_request", return_value={"response": "OK"}
+        ) as request:
             self.assertEqual(provider.generate(GenerationRequest("hello")), "OK")
         payload = request.call_args.args[1]
         self.assertFalse(payload["stream"])
+
+    def test_think_is_sent_as_top_level_ollama_option(self):
+        provider = OllamaProvider("local-model")
+        generation = GenerationRequest(
+            "hello", options={"think": False, "num_predict": 320}
+        )
+        with patch.object(provider, "_request", return_value={"response": "OK"}) as request:
+            self.assertEqual(provider.generate(generation), "OK")
+        payload = request.call_args.args[1]
+        self.assertIs(payload["think"], False)
+        self.assertNotIn("think", payload["options"])
+        self.assertEqual(payload["options"]["num_predict"], 320)
+
+    def test_think_option_rejects_non_boolean_values(self):
+        provider = OllamaProvider("local-model")
+        generation = GenerationRequest("hello", options={"think": "no"})
+        with self.assertRaises(ValueError):
+            provider.generate(generation)
 
     def test_unload_uses_zero_keep_alive(self):
         provider = OllamaProvider("local-model")
@@ -86,7 +107,7 @@ class OllamaProviderTests(unittest.TestCase):
             provider.base_url,
             503,
             "unavailable",
-            {},
+            Message(),
             BytesIO(b"secret backend detail"),
         )
         with patch("core.ai.ollama.urlopen", side_effect=error):
@@ -102,7 +123,7 @@ class OllamaProviderTests(unittest.TestCase):
             provider.base_url,
             429,
             "too many requests",
-            {},
+            Message(),
             BytesIO(b"private quota detail"),
         )
         with patch("core.ai.ollama.urlopen", side_effect=error):

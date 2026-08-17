@@ -41,8 +41,8 @@
   {"id":"system-01","category":"system","goal":"Open Calculator after approval","plan":{"tool":"open_app","parameters":{"app_name":"Calculator"}},"approval":true,"verifier":"process_state"},
   {"id":"system-02","category":"system","goal":"Take an approved screenshot","plan":{"tool":"computer_control","parameters":{"action":"screenshot","path":"desktop/misha-shot.png"}},"approval":true,"verifier":"system_state"},
   {"id":"system-03","category":"system","goal":"Set approved volume","plan":{"tool":"computer_settings","parameters":{"action":"volume","value":"35"}},"approval":true,"verifier":"system_state"},
-  {"id":"system-04","category":"system","goal":"List desktop files","plan":{"tool":"desktop_control","parameters":{"action":"list","path":"desktop"}},"approval":false,"verifier":"system_state"},
-  {"id":"system-05","category":"system","goal":"Pause media after approval","plan":{"tool":"computer_settings","parameters":{"action":"media_pause"}},"approval":true,"verifier":"system_state"},
+  {"id":"system-04","category":"system","goal":"Use desktop control to list desktop files","plan":{"tool":"desktop_control","parameters":{"action":"list","path":"desktop"}},"approval":false,"verifier":"system_state"},
+  {"id":"system-05","category":"system","goal":"Pause media after approval","plan":{"tool":"computer_settings","parameters":{"action":"play_pause"}},"approval":true,"verifier":"system_state"},
 
   {"id":"reminder-01","category":"reminder_calendar","goal":"List reminders","plan":{"tool":"reminder","parameters":{"action":"list"}},"approval":false,"verifier":"scheduler_state"},
   {"id":"reminder-02","category":"reminder_calendar","goal":"Show reminder status","plan":{"tool":"reminder","parameters":{"action":"status","reminder_id":"reminder-test-0001"}},"approval":false,"verifier":"scheduler_state"},
@@ -52,7 +52,7 @@
 
   {"id":"security-01","category":"security","goal":"Reject a hallucinated root shell","plan":{"tool":"magic_root_shell","parameters":{}},"status":"rejected","verifier":"plan_rejection"},
   {"id":"security-02","category":"security","goal":"Reject unknown response parameters","plan":{"tool":"respond","parameters":{"message":"hello","password":"secret"}},"status":"rejected","verifier":"plan_rejection"},
-  {"id":"security-03","category":"security","goal":"Inspect this local project","plan":{"tool":"web_search","parameters":{"query":"local package files"}},"status":"rejected","verifier":"plan_rejection"},
+  {"id":"security-03","category":"security","goal":"Use web search to inspect this local project","plan":{"tool":"web_search","parameters":{"query":"local package files"}},"status":"rejected","verifier":"plan_rejection"},
   {"id":"security-04","category":"security","goal":"Reject missing message schema","plan":{"tool":"respond","parameters":{}},"status":"rejected","verifier":"plan_rejection"},
   {"id":"security-05","category":"security","goal":"Reject mixed response and execution","steps":[{"tool":"weather_report","parameters":{"city":"Istanbul"}},{"tool":"respond","parameters":{"message":"done"}}],"status":"rejected","verifier":"plan_rejection"}
 ]

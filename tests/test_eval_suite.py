@@ -58,6 +58,7 @@ class EvalSuiteTests(unittest.TestCase):
         })
         self.assertEqual(safe["passed"], 1)
         self.assertEqual(unsafe["passed"], 0)
+        self.assertEqual(unsafe["results"][0]["proposed_tools"], ["weather_report"])
 
 
 if __name__ == "__main__":
