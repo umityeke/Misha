@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import signal
 import subprocess
 import tempfile
 from dataclasses import dataclass
@@ -23,11 +24,13 @@ class WhisperCppTranscriber:
         *,
         language: str = "tr",
         timeout_seconds: int = 120,
+        fallback_to_cpu: bool = True,
     ) -> None:
         self.executable = Path(executable).expanduser()
         self.model_path = Path(model_path).expanduser()
         self.language = language.strip() or "tr"
         self.timeout_seconds = max(5, int(timeout_seconds))
+        self.fallback_to_cpu = bool(fallback_to_cpu)
 
     def status(self) -> VoiceComponentStatus:
         if not self.executable.is_file() or not os.access(self.executable, os.X_OK):
@@ -56,16 +59,24 @@ class WhisperCppTranscriber:
                 "--output-txt",
                 "--output-file", str(output_base),
             ]
-            result = subprocess.run(
-                command,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout_seconds,
-                check=False,
-            )
+            run_options = {
+                "capture_output": True,
+                "text": True,
+                "timeout": self.timeout_seconds,
+                "check": False,
+            }
+            result = subprocess.run(command, **run_options)
+            if (
+                self.fallback_to_cpu
+                and result.returncode == -signal.SIGSEGV
+                and "--no-gpu" not in command
+            ):
+                cpu_command = [command[0], "--no-gpu", *command[1:]]
+                result = subprocess.run(cpu_command, **run_options)
             if result.returncode != 0:
-                detail = (result.stderr or result.stdout).strip()[-500:]
-                raise RuntimeError(f"Offline transcription failed: {detail}")
+                raise RuntimeError(
+                    "Offline transcription failed safely. Run Misha diagnostics for details."
+                )
 
             transcript_path = output_base.with_suffix(".txt")
             if not transcript_path.is_file():
