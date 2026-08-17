@@ -232,6 +232,7 @@ OUTPUT — return ONLY valid JSON, no markdown, no explanation, no code blocks:
 
 
 ALLOWED_TOOLS = frozenset(TOOL_REGISTRY)
+PLANNER_GENERATION_OPTIONS = {"num_predict": 320, "think": False}
 
 
 def _planner_system_prompt() -> str:
@@ -409,7 +410,12 @@ def create_plan(goal: str, context: str = "") -> dict:
         user_input += f"\n\nContext: {context}"
 
     try:
-        plan = generate_json(user_input, system=_planner_system_prompt(), temperature=0.1)
+        plan = generate_json(
+            user_input,
+            system=_planner_system_prompt(),
+            temperature=0.1,
+            options=PLANNER_GENERATION_OPTIONS,
+        )
         plan = _validate_plan(plan, goal)
 
         print(f"[Planner] ✅ Plan: {len(plan['steps'])} steps")
@@ -457,7 +463,12 @@ Error: {error}
 Create a REVISED plan for the remaining work only. Do not repeat completed steps."""
 
     try:
-        plan = generate_json(prompt, system=_planner_system_prompt(), temperature=0.1)
+        plan = generate_json(
+            prompt,
+            system=_planner_system_prompt(),
+            temperature=0.1,
+            options=PLANNER_GENERATION_OPTIONS,
+        )
         plan = _validate_plan(plan, goal, completed_steps=completed_steps)
 
         print(f"[Planner] 🔄 Revised plan: {len(plan['steps'])} steps")

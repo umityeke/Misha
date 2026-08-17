@@ -12,7 +12,11 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from agent.planner import _planner_system_prompt, _validate_plan
+from agent.planner import (
+    PLANNER_GENERATION_OPTIONS,
+    _planner_system_prompt,
+    _validate_plan,
+)
 from core.ai.runtime import generate_json
 from core.action_policy import approval_reason
 
@@ -158,7 +162,7 @@ def run_live(
     if generator is None:
         generator = lambda prompt: generate_json(
             prompt, system=_planner_system_prompt(), temperature=0.0,
-            options={"num_predict": 320, "think": False},
+            options=PLANNER_GENERATION_OPTIONS,
         )
     started = time.monotonic()
     results = []

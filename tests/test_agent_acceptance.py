@@ -49,6 +49,18 @@ class AgentAcceptanceTests(unittest.TestCase):
         self.assertEqual(plan["steps"][0]["tool"], "respond")
         self.assertNotIn("magic_root_shell", str(plan))
 
+    def test_planner_disables_extended_thinking_and_bounds_output(self):
+        raw = {
+            "goal": "check weather",
+            "steps": [{"tool": "weather_report", "parameters": {"city": "Istanbul"}}],
+        }
+        with patch("agent.planner.generate_json", return_value=raw) as generate:
+            create_plan("check weather")
+        self.assertEqual(
+            generate.call_args.kwargs["options"],
+            {"num_predict": 320, "think": False},
+        )
+
     def test_agent_rollback_is_approval_gated_and_verified(self):
         plan = {
             "goal": "rollback code edit",
