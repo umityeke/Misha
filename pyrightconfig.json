@@ -1,0 +1,16 @@
+{
+    "include": [
+        "agent/runtime_result.py",
+        "agent/tool_registry.py",
+        "core/action_policy.py",
+        "core/retry_policy.py",
+        "core/file_transactions.py",
+        "core/reminder_store.py",
+        "core/outbound_guard.py",
+        "core/system_capabilities.py",
+        "core/ui_automation.py",
+        "actions/developer_tools.py"
+    ],
+    "exclude": ["dist", "build", "work", "misha-vscode", "venv"],
+    "typeCheckingMode": "basic"
+}

@@ -1,0 +1,260 @@
+{
+  "live_model_measured": false,
+  "mode": "deterministic_contract_only",
+  "passed": 50,
+  "results": [
+    {
+      "id": "info-01",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-02",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-03",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-04",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-05",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-06",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-07",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-08",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-09",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "info-10",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-01",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-02",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-03",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-04",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-05",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-06",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-07",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-08",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-09",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "file-10",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-01",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-02",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-03",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-04",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-05",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-06",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-07",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-08",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-09",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "ide-10",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "browser-01",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "browser-02",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "browser-03",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "browser-04",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "browser-05",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "system-01",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "system-02",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "system-03",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "system-04",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "system-05",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "reminder-01",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "reminder-02",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "reminder-03",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "reminder-04",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "reminder-05",
+      "outcome": "accepted",
+      "passed": true
+    },
+    {
+      "id": "security-01",
+      "outcome": "rejected",
+      "passed": true
+    },
+    {
+      "id": "security-02",
+      "outcome": "rejected",
+      "passed": true
+    },
+    {
+      "id": "security-03",
+      "outcome": "rejected",
+      "passed": true
+    },
+    {
+      "id": "security-04",
+      "outcome": "rejected",
+      "passed": true
+    },
+    {
+      "id": "security-05",
+      "outcome": "rejected",
+      "passed": true
+    }
+  ],
+  "schema_version": 1,
+  "success_rate": 1.0,
+  "total": 50
+}

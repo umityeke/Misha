@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "misha-local-agent"
+version = "0.1.0"
+description = "Local-first, hands-free personal software assistant for macOS"
+readme = "readme.md"
+requires-python = ">=3.11,<3.14"
+license = "CC-BY-NC-4.0"
+license-files = ["LICENSE"]
+authors = [{name = "Ümit Yeke"}]
+dependencies = [
+  "beautifulsoup4>=4.14,<5",
+  "cryptography>=46,<47",
+  "duckduckgo-search>=8.1,<9",
+  "mss>=10.2,<11",
+  "numpy>=2.4,<3",
+  "Pillow>=12,<13",
+  "playwright>=1.60,<2",
+  "psutil>=7.2,<8",
+  "PyAutoGUI>=0.9.54,<0.10",
+  "pyperclip>=1.11,<2",
+  "PyQt6>=6.11,<7",
+  "python-dotenv>=1.2,<2",
+  "python-pptx>=1,<2",
+  "requests>=2.34,<3",
+  "Send2Trash>=2.1,<3",
+  "sounddevice>=0.5,<0.6",
+  "youtube-transcript-api>=1.2,<2",
+  "pynput>=1.8,<2; platform_system != 'Darwin'",
+  "pyobjc-framework-ApplicationServices>=12,<13; platform_system == 'Darwin'",
+  "pyobjc-framework-Cocoa>=12,<13; platform_system == 'Darwin'",
+]
+
+[project.optional-dependencies]
+remote = ["psycopg2-binary>=2.9,<3"]
+dev = [
+  "autoflake>=2.3,<3",
+  "flake8>=7.3,<8",
+  "pip-audit>=2.9,<3",
+  "pip-licenses>=5.0,<6",
+  "pyinstaller>=6.21,<7",
+  "pyright>=1.1,<2",
+  "ruff>=0.12,<1",
+]
+test = [
+  "pytest>=8.4,<9",
+  "pytest-asyncio>=1.1,<2",
+  "pytest-cov>=6.2,<7",
+]
+
+[project.scripts]
+misha = "main:main"
+misha-doctor = "scripts.doctor:main"
+
+[tool.setuptools]
+py-modules = ["main", "ui"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["actions*", "agent*", "cloud*", "config*", "core*", "memory*", "scripts*"]
+exclude = ["tests*", "misha-vscode*", "build*", "dist*", "venv*"]
+
+[tool.setuptools.package-data]
+core = ["prompt.txt"]
+
+[tool.pytest.ini_options]
+minversion = "8.4"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--strict-config --strict-markers -ra"
+asyncio_mode = "strict"
+markers = [
+  "integration: bounded integration tests with local-only dependencies",
+  "ui: offscreen Qt/UI tests",
+  "slow: stability or soak tests excluded from the default CI lane",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["actions", "agent", "core", "memory"]
+omit = ["tests/*", "work/*", "dist/*", "build/*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+exclude = ["dist", "build", "work", "misha-vscode", "venv"]
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82"]

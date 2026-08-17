@@ -1,0 +1,132 @@
+name: Misha quality
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: misha-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install minimal Linux desktop test runtime
+        run: >-
+          sudo apt-get update &&
+          sudo apt-get install -y --no-install-recommends
+          xvfb libegl1 libgl1 libportaudio2 libxkbcommon-x11-0
+      - name: Install deterministic test and quality dependencies
+        run: python -m pip install -e ".[dev,test]"
+      - name: Formatter check (hardened CI surface)
+        run: >-
+          python -m ruff format --check
+          scripts/quality_gate.py tests/fakes.py tests/conftest.py
+          tests/test_test_infrastructure.py tests/test_quality_gate.py
+      - name: Compile, lint, type-check, test, and secret scan
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: xvfb-run -a python scripts/quality_gate.py --pytest
+      - name: Print bounded test diagnostics on failure
+        if: failure()
+        run: |
+          if test -f quality-artifacts/tests.log; then
+            tail -n 160 quality-artifacts/tests.log \
+              | sed -E 's#(/home/runner/work/[^[:space:]]*)#[PATH]#g'
+          else
+            echo "tests.log was not produced"
+          fi
+      - name: Upload JUnit, coverage, and quality logs
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: quality-results-${{ github.run_id }}
+          path: quality-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install audit tools
+        run: >-
+          python -m pip install
+          "pip-audit>=2.9,<3" "pip-licenses>=5,<6"
+      - name: Build isolated runtime environment
+        run: |
+          python -m venv .audit-venv
+          .audit-venv/bin/python -m pip install --upgrade pip setuptools wheel
+          .audit-venv/bin/python -m pip install .
+      - name: Create report directory
+        run: mkdir -p quality-artifacts
+      - name: Dependency vulnerability gate
+        run: >-
+          python -m pip_audit
+          --path .audit-venv/lib/python3.11/site-packages
+          --format=json
+          | tee quality-artifacts/pip-audit.json
+      - name: License inventory
+        if: always()
+        env:
+          PYTHONPATH: .audit-venv/lib/python3.11/site-packages
+        run: >-
+          python -m piplicenses --format=json
+          --output-file=quality-artifacts/licenses.json
+      - name: Upload supply-chain reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: supply-chain-${{ github.run_id }}
+          path: quality-artifacts/
+          if-no-files-found: warn
+          retention-days: 30
+
+  macos-build-smoke:
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install build dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Build native application
+        run: >-
+          python -m PyInstaller --noconfirm
+          --workpath build/ci-work --distpath dist Misha.spec
+      - name: Verify executable, plist, and ad-hoc signature
+        run: |
+          test -x dist/Misha.app/Contents/MacOS/Misha
+          file dist/Misha.app/Contents/MacOS/Misha | grep -q 'arm64'
+          plutil -lint dist/Misha.app/Contents/Info.plist
+          bash scripts/sign_macos_bundle.sh dist/Misha.app - packaging/macos/entitlements-development.plist
+      - name: Archive native build
+        run: ditto -c -k --sequesterRsrc --keepParent dist/Misha.app Misha-macos-arm64.zip
+      - name: Upload native build
+        uses: actions/upload-artifact@v6
+        with:
+          name: Misha-macos-arm64-${{ github.run_id }}
+          path: Misha-macos-arm64.zip
+          if-no-files-found: error
+          retention-days: 14

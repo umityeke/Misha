@@ -1,0 +1,42 @@
+venv/
+__pycache__/
+build/
+dist/
+quality-artifacts/
+work/
+*.pyc
+.env
+.env.*
+!.env.example
+.DS_Store
+config/api_keys.json
+misha-vscode/node_modules/
+
+# Local authentication/setup artifacts — never commit
+gh_code.txt
+gh_tokens.png
+railway_tab.png
+
+# One-off credential extraction/debug helpers — not product code
+get_railway_url.py
+pw_deep_search.py
+pw_extract_db.py
+pw_extract_react.py
+pw_intercept.py
+
+# Retired one-off browser/chat/account migration helpers
+ask_db_url.py
+ask_tokens.py
+cdp_chatgpt.py
+chat_round2.py
+chat_round3.py
+chat_round4.py
+fix_chatgpt.py
+gh_auth_wait.py
+gh_device_login.py
+pw_screenshot.py
+read_chatgpt.py
+read_tokens.py
+send_to_chatgpt.py
+talk_to_cpt.py
+test_ide_context.py

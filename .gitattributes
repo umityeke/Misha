@@ -1,0 +1,37 @@
+* text=auto
+
+*.py text eol=lf
+*.pyi text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.aiff binary
+*.bin binary
+*.gif binary
+*.icns binary
+*.ico binary
+*.jpeg binary
+*.jpg binary
+*.mp3 binary
+*.mp4 binary
+*.pdf binary
+*.png binary
+*.sqlite binary
+*.vsix binary
+*.wav binary
+*.zip binary
+
+# Vendored packages retain their published byte-for-byte line endings. They are
+# not part of Misha's formatting surface.
+misha-vscode/node_modules/** -text
