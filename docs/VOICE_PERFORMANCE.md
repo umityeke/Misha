@@ -8,10 +8,12 @@ near-silent PCM audio.
 ## 2026-08-17 Apple arm64 baseline
 
 The local `large-v3-turbo-q5_0` model completed the five-second CPU-only fixture in
-about 7.4 seconds, using about 30.3 CPU-seconds (407% of one core) and 861 MiB peak
-RSS. The machine was charging, so this run cannot establish battery-drain acceptance.
-The managed test session could not allocate the Metal buffer; GPU and unplugged
-battery measurements therefore remain release acceptance work.
+7.505 seconds, using 30.375 CPU-seconds (404.7% of one core) and 857.5 MiB peak RSS.
+The machine was charging, so this run cannot establish battery-drain acceptance.
+The same fixture exposed a native Metal-path `SIGSEGV`; the product transcriber now
+retries exactly once with `--no-gpu` after that signal and keeps backend diagnostics
+out of user-facing errors. GPU and unplugged battery measurements remain release
+acceptance work.
 
 The machine-readable, path-redacted result is written to
 `quality-artifacts/voice-profile.json`. Re-run it with:
@@ -20,6 +22,7 @@ The machine-readable, path-redacted result is written to
 python scripts/profile_voice_runtime.py \
   --whisper-cli /opt/homebrew/bin/whisper-cli \
   --model ~/.misha/models/ggml-large-v3-turbo-q5_0.bin \
+  --no-gpu \
   --output quality-artifacts/voice-profile.json
 ```
 
