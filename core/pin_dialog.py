@@ -143,6 +143,15 @@ class PinDialog(QDialog):
         secure.setStyleSheet(f"color: {C.DIM}; border: none;")
         layout.addWidget(secure)
 
+        self.quit_button = QPushButton("Quit Misha")
+        self.quit_button.setAccessibleName("Quit Misha without unlocking")
+        self.quit_button.setFixedHeight(34)
+        self.quit_button.setStyleSheet(
+            f"color: {C.DIM}; background: transparent; border: none;"
+        )
+        self.quit_button.clicked.connect(self.reject)
+        layout.addWidget(self.quit_button)
+
     def _on_keypad(self, key: str):
         if key == "C":
             self.pin_input.clear()

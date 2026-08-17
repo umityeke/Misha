@@ -81,6 +81,10 @@ class UIAcceptanceTests(unittest.TestCase):
         self.assertFalse(pin.grab().isNull())
         self.assertEqual(pin.pin_input.echoMode(), QLineEdit.EchoMode.Password)
         self.assertEqual(pin.pin_input.accessibleName(), "Four digit Misha PIN")
+        self.assertEqual(
+            pin.quit_button.accessibleName(),
+            "Quit Misha without unlocking",
+        )
         overlay.close()
         pin.close()
 
