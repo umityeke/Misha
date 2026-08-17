@@ -226,6 +226,16 @@ TOOL_REGISTRY = MappingProxyType({
          "repeat": str, "fold": int, "reminder_id": str, "include_terminal": bool},
         risk=RiskLevel.EXTERNAL_IMPACT, external=True, verifier="scheduler_state",
     ),
+    "personal_apps": _spec(
+        "personal_apps", {"action": str},
+        {"limit": int, "query": str, "receiver": str, "original_message_id": str,
+         "subject": str, "body": str,
+         "attachments": list, "sensitive_content_approved": bool, "start": str,
+         "end": str, "calendar_name": str, "event_id": str, "title": str,
+         "description": str},
+        risk=RiskLevel.EXTERNAL_IMPACT, timeout=60, external=True,
+        verifier="local_personal_app_state",
+    ),
     "desktop_control": _spec(
         "desktop_control", {"action": str},
         {"path": str, "task": str, "url": str, "mode": str},

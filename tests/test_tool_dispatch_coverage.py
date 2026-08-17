@@ -18,6 +18,7 @@ _DISPATCH_TARGETS = {
     "screen_process": "actions.screen_processor.screen_process",
     "send_message": "actions.send_message.send_message",
     "reminder": "actions.reminder.reminder",
+    "personal_apps": "actions.personal_apps.personal_apps",
     "youtube_video": "actions.youtube_video.youtube_video",
     "weather_report": "actions.weather_report.weather_action",
     "computer_settings": "actions.computer_settings.computer_settings",

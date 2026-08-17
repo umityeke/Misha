@@ -27,6 +27,20 @@ def approval_reason(tool_name: str, args: dict) -> str | None:
         if action in {"list", "status"}:
             return None
         return f"{action or 'create'} a system reminder"
+    if tool_name == "personal_apps":
+        if action in {"mail_inbox", "mail_search", "calendar_list", "calendar_events"}:
+            return None
+        if action == "mail_draft":
+            return f"create a Mail draft for {args.get('receiver', 'the selected recipient')}"
+        if action == "mail_reply_draft":
+            return f"create a reply draft for local Mail message {args.get('original_message_id', '')}"
+        if action == "mail_send":
+            return f"send Mail to {args.get('receiver', 'the selected recipient')}"
+        if action in {"calendar_create", "calendar_update", "calendar_delete"}:
+            verb = action.removeprefix("calendar_")
+            target = args.get("event_id") or args.get("calendar_name", "the selected calendar")
+            return f"{verb} local calendar item {target}"
+        return "run an unrecognized local personal-app operation"
     if tool_name == "file_controller":
         if action in _FILE_MUTATIONS:
             return f"{action} a file or folder"

@@ -14,7 +14,7 @@ class DocumentationClaimsTests(unittest.TestCase):
         self.assertIn("docs/FEATURE_STATUS.md", readme)
         self.assertIn("FEATURE_STATUS.md", guide)
         for required_boundary in (
-            "Live Google/Microsoft integrations",
+            "Cloud Google/Microsoft API adapters",
             "Automatic updates",
             "Native macOS distribution",
             "Hands-free wake and owner voice gate",

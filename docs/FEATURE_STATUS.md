@@ -14,12 +14,12 @@ listed in the final column.
 | File and code changes | Implemented | Approved roots, diff/approval, encrypted transaction journal and rollback are covered; OS sandbox acceptance remains environment-dependent. |
 | Isolated browser actions | Implemented | URL/DOM postconditions and security boundaries are covered; it intentionally does not reuse personal browser sessions. |
 | Reminders and OS notifications | Implemented | Local scheduling and notification dispatch are covered; platform permission/display acceptance is still a native-session check. |
-| Calendar and mail | Partial | Provider-neutral safety services and OAuth PKCE/token storage exist; live Google/Microsoft adapters and owner OAuth applications are not configured. |
+| Local Calendar and Mail | Implemented | Uses accounts already configured in macOS through bounded JXA adapters. Reads are bounded; every mutation is approved; packaged-app Automation permission still needs live owner acceptance. |
 | Screen observation | Implemented, opt-in | Local, visible and off by default; protected/credential windows are excluded. macOS permission acceptance is still required. |
 | Encrypted memory | Implemented | Authenticated local storage and migration are covered; packaged-app Keychain acceptance remains open. |
 | Automatic updates | Not enabled | Signed manifest/package verification primitives exist, but no production key or hosting channel is configured. |
 | Native macOS distribution | Development build | Hardened-runtime ad-hoc bundle exists; Developer ID signing, notarization, stapling, Gatekeeper and clean-Mac acceptance are open. |
-| Live Google/Microsoft integrations | Not available | Requires owner-created OAuth applications, approved scopes and provider adapters. |
+| Cloud Google/Microsoft API adapters | Optional, disabled | The owner selected local macOS Mail/Calendar control. OAuth contracts remain isolated for a future explicit opt-in and are not required. |
 
 Known external and hardware gaps are tracked in [`KNOWN_ISSUES.md`](KNOWN_ISSUES.md).
 The master development checklist remains the acceptance source of truth.

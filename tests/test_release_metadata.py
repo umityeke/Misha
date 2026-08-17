@@ -27,6 +27,8 @@ class ReleaseMetadataTests(unittest.TestCase):
         self.assertIn("non_runtime_excludes", spec)
         self.assertIn('"cv2"', spec)
         self.assertIn('"psycopg2"', spec)
+        self.assertIn("'NSAppleEventsUsageDescription'", spec)
+        self.assertIn("Mail ve Takvim", spec)
 
     def test_entitlements_are_minimal_and_do_not_disable_security(self):
         entitlements = plistlib.loads(

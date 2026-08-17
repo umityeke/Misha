@@ -79,6 +79,7 @@ app = BUNDLE(
         'LSMinimumSystemVersion': '13.0',
         'NSMicrophoneUsageDescription': 'Misha yalnızca açık sesli komut ve sahip sesi kaydı sırasında mikrofona erişir.',
         'NSCameraUsageDescription': 'Misha yalnızca açık kamera analizi komutlarında kameraya erişir.',
+        'NSAppleEventsUsageDescription': 'Misha yalnızca açık komutlarınız ve işlem onayınızla Mail ve Takvim uygulamalarını denetler.',
         'NSHighResolutionCapable': True,
     },
 )

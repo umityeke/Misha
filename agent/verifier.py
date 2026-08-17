@@ -433,6 +433,22 @@ def verify_tool_result(
         return _verify_open_app(parameters)
     if tool == "reminder":
         return _verify_reminder(parameters, output)
+    if tool == "personal_apps":
+        action = str(parameters.get("action", "")).casefold()
+        if action in {"mail_inbox", "mail_search", "calendar_list", "calendar_events"}:
+            return VerificationResult(
+                VerificationStatus.VERIFIED,
+                "The local personal app returned a bounded read result.",
+            )
+        if action in {"mail_draft", "mail_reply_draft", "calendar_create", "calendar_update", "calendar_delete"} and "id=" in output:
+            return VerificationResult(
+                VerificationStatus.VERIFIED,
+                "The local app returned an identifier for the created item.",
+            )
+        return VerificationResult(
+            VerificationStatus.UNVERIFIED,
+            "The external mail delivery could not be independently confirmed and will not be retried.",
+        )
     if tool == "computer_settings":
         return _verify_computer_settings(parameters)
     if tool == "db_manager":

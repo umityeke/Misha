@@ -112,6 +112,19 @@ reminder
   fold: 0 | 1 for an ambiguous daylight-saving time (optional)
   reminder_id: string (for status/edit/delete)
 
+personal_apps
+  action: "mail_inbox" | "mail_search" | "mail_draft" | "mail_reply_draft" | "mail_send" | "calendar_list" | "calendar_events" | "calendar_create" | "calendar_update" | "calendar_delete" (required)
+  limit: integer 1–100 (for inbox/search/events)
+  query: string (for mail_search)
+  receiver: one email address (for mail_draft/mail_send)
+  subject, body: string (for mail_draft/mail_send)
+  original_message_id: exact numeric local Mail ID (for mail_reply_draft)
+  attachments: list of paths inside Desktop/Documents/Downloads (optional)
+  sensitive_content_approved: boolean (only after separate explicit approval)
+  start, end: ISO-8601 datetime with timezone offset (for calendar_events/calendar_create)
+  calendar_name, title, description: string (for calendar_create/calendar_update)
+  event_id: exact event ID (for calendar_update/calendar_delete)
+
 desktop_control
   action: "wallpaper" | "organize" | "clean" | "list" | "task" (required)
   path: string (optional)

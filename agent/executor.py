@@ -160,6 +160,10 @@ def _call_tool(tool: str, parameters: dict, speak: Callable | None) -> Any:
         from actions.reminder import reminder
         return reminder(parameters=parameters, player=None)
 
+    elif tool == "personal_apps":
+        from actions.personal_apps import personal_apps
+        return personal_apps(parameters=parameters, player=None)
+
     elif tool == "youtube_video":
         from actions.youtube_video import youtube_video
         return youtube_video(parameters=parameters, player=None)

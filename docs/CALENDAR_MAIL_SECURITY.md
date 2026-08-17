@@ -1,9 +1,14 @@
 # Calendar and mail integration contract
 
-Calendar and mail are provider-neutral services. OAuth tokens must use the OS
-credential store; no provider adapter may persist them in config, logs, or a repo.
-Google/Microsoft live adapters remain disabled until an owner-created OAuth app,
-minimal scopes, and real-account acceptance are available.
+The default Calendar and Mail path controls the accounts already configured in the
+native macOS applications. User values are supplied as `osascript` arguments and are
+never interpolated into script source or passed through a shell. Reads are bounded;
+mutations require the central exact action approval. No account password, API key,
+OAuth client, or paid provider is required.
+
+Provider-neutral services and the OAuth layer remain isolated for a future explicit
+opt-in. If enabled later, tokens must use the OS credential store; no provider adapter
+may persist them in config, logs, or a repository.
 
 The shared OAuth layer uses Authorization Code + S256 PKCE, a one-shot 10-minute
 state, exact provider endpoint allowlists, and a fixed loopback callback. Token
@@ -18,5 +23,7 @@ conflict.
 
 Mail validates recipients, size, attachment roots, symlinks and executable/script
 extensions. The final recipients/subject/body are SHA-256 bound to approval.
-Sensitive-content matches require an additional approval. A provider response is
-not called sent/verified unless it contains a non-empty receipt ID.
+Sensitive-content matches require an additional approval. A provider response is not
+called sent/verified unless it contains a non-empty receipt ID. The local Mail adapter
+reports acceptance by Mail with its local identifier and always describes remote
+delivery as unverified.
